@@ -1,3 +1,11 @@
+import { addDecorator } from '@storybook/react'
+import globalStyles from '../src/styles/global.style'
+
+addDecorator((story) => {
+  globalStyles()
+  return <>{story()}</>
+})
+
 export const parameters = {
   actions: { argTypesRegex: '^on[A-Z].*' },
   controls: {
