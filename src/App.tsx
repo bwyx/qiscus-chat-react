@@ -1,5 +1,6 @@
 import { Suspense, lazy } from 'react'
 import { Routes, Route, Link } from 'react-router-dom'
+import { useStore } from '~/store'
 
 import globalStyle from '~/styles/global.style'
 
@@ -9,8 +10,11 @@ const Chat = lazy(() => import('~/views/Chat'))
 function App() {
   globalStyle()
 
+  const isAuthenticated = useStore((state) => state.isAuthenticated)
+
   return (
     <div className="App">
+      <pre>{JSON.stringify({ isAuthenticated }, null, 2)}</pre>
       <Routes>
         <Route
           path="/"

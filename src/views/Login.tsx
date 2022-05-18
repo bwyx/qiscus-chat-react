@@ -1,5 +1,12 @@
+import useAuth from '~/hooks/useAuth'
+
 const Login = () => {
-  return <button>Login</button>
+  const { login } = useAuth({
+    redirectTo: '/chat',
+    redirectIfAuthenticated: true
+  })
+
+  return <button onClick={login}>Login</button>
 }
 
 export default Login

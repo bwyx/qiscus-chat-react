@@ -1,5 +1,14 @@
+import useAuth from '~/hooks/useAuth'
+
 const Chat = () => {
-  return <div>Chat</div>
+  const { logout } = useAuth({ redirectTo: '/' })
+
+  return (
+    <div>
+      <h1>Chat Page</h1>
+      <button onClick={logout}>Logout</button>
+    </div>
+  )
 }
 
 export default Chat
