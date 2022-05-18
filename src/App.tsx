@@ -1,4 +1,4 @@
-import { Switch } from '~/components/base'
+import ThemeSwitcher from '~/components/ThemeSwitcher'
 
 import globalStyle from '~/styles/global.style'
 
@@ -7,7 +7,7 @@ function App() {
 
   return (
     <div className="App">
-      <Switch />
+      <ThemeSwitcher />
     </div>
   )
 }
