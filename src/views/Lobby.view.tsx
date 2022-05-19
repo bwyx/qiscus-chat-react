@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
 import useQiscus from '~/hooks/useQiscus'
 
 import Room from '~/components/Room'
@@ -14,8 +13,7 @@ const styles = {
 }
 
 const Lobby = () => {
-  const { isReady, qiscus } = useQiscus({ redirectTo: '/' })
-  const navigate = useNavigate()
+  const { isReady, qiscus, user } = useQiscus({ redirectTo: '/' })
 
   const [rooms, setRooms] = useState<any[]>([])
   const [page, setPage] = useState(1)
@@ -49,7 +47,8 @@ const Lobby = () => {
             name: room.name,
             avatar: room.avatar,
             message: room.last_comment_message,
-            date: room.last_comment_message_created_at
+            date: room.last_comment_message_created_at,
+            received: room.last_comment.email !== user.email
           }
 
           return <Room {...props} key={i} />

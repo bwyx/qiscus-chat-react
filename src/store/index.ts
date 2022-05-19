@@ -1,7 +1,11 @@
 import create from 'zustand'
 import { persist } from 'zustand/middleware'
 
-export const useStore = create(
+interface IState {
+  user: any
+}
+
+export const useStore = create<IState>(
   persist(
     () => ({
       user: null

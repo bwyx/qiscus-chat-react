@@ -37,20 +37,23 @@ interface RoomProps {
   name: string
   avatar: string
   message: string
+  received: boolean
   date: any
 }
 
-const Room = ({ id, name, avatar, message, date }: RoomProps) => {
+const Room = ({ id, name, avatar, message, received, date }: RoomProps) => {
   const navigate = useNavigate()
   const isFileMessage = message.includes('[file]')
-  const snippetMessage = isFileMessage ? <em>File received.</em> : message
+  const fileMessage = <em>File {received ? 'received' : 'sent'}.</em>
 
   return (
     <li onClick={() => navigate(`/chat?room=${id}`)} className={styles.outer}>
       <img className={styles.avatar} src={avatar} alt="" />
       <div>
         <h3 className={styles.roomName}>{name}</h3>
-        <span className={styles.message}>{snippetMessage}</span>
+        <span className={styles.message}>
+          {isFileMessage ? fileMessage : message}
+        </span>
       </div>
     </li>
   )
