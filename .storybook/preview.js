@@ -1,9 +1,17 @@
 import { addDecorator } from '@storybook/react'
 import globalStyles from '../src/styles/global.style'
+import ThemeSwitcher from '../src/components/ThemeSwitcher'
 
 addDecorator((story) => {
   globalStyles()
-  return <>{story()}</>
+  return (
+    <>
+      {story()}
+      <div style={{ position: 'fixed', bottom: 15, right: 15 }}>
+        <ThemeSwitcher />
+      </div>
+    </>
+  )
 })
 
 export const parameters = {
