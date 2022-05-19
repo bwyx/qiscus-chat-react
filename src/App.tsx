@@ -5,6 +5,7 @@ import globalStyle from '~/styles/global.style'
 import { css } from '~/styles'
 
 const Login = lazy(() => import('~/views/Login.view'))
+const Lobby = lazy(() => import('~/views/Lobby.view'))
 const Chat = lazy(() => import('~/views/Chat.view'))
 
 const styles = {
@@ -112,16 +113,20 @@ export default function () {
   return (
     <QiscusProvider>
       <App>
-        <nav>
-          <Link to="/">Home</Link>
-          <Link to="/chat">Chat</Link>
-        </nav>
         <Routes>
           <Route
             path="/"
             element={
               <Suspense fallback={<>...</>}>
                 <Login />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/lobby"
+            element={
+              <Suspense fallback={<>...</>}>
+                <Lobby />
               </Suspense>
             }
           />

@@ -1,12 +1,13 @@
-import React, { useState, createContext } from 'react'
-import { env } from '~/config'
-import { setUser } from '~/store'
+import React, { useState, useEffect, createContext } from 'react'
+import { useStore, setUser } from '~/store'
 
-import type QiscusSDK from 'qiscus-sdk-core'
+import QiscusSDK from 'qiscus-sdk-core'
+
+import { env } from '~/config'
 
 interface IQiscusContext {
-  qiscus: QiscusSDK | null
-  initQiscus: (user?: any) => Promise<QiscusSDK>
+  isReady: boolean
+  qiscus: QiscusSDK
   login: QiscusSDK['setUser']
   logout: () => void
 }
@@ -15,25 +16,18 @@ export const QiscusContext =
   createContext<IQiscusContext | undefined>(undefined)
 
 const QiscusProvider = ({ children }: { children: React.ReactNode }) => {
-  const [qiscus, setQiscus] = useState<QiscusSDK | null>(null)
+  const [isReady, setIsReady] = useState(false)
+  const [qiscus, setQiscus] = useState<QiscusSDK>(new QiscusSDK())
+  const savedUser = useStore((state) => state.user)
 
-  const initQiscus = async (user?: any) => {
-    if (qiscus) {
-      console.log('[QiscusProvider] Using already initialized Qiscus')
-
-      return qiscus
-    }
-
-    console.log('[QiscusProvider] Initializing new Qiscus instance')
-    const QiscusSDK = (await import('qiscus-sdk-core')).default
-
+  const initQiscus = async (user: any = savedUser) => {
     const client = new QiscusSDK()
 
-    client.debugMode = true
     client.init({
       AppId: env.VITE_QISCUS_APPID,
       options: {
         loginSuccessCallback: ({ user }: any) => {
+          setIsReady(true)
           setUser(user)
           console.log('loginSuccessCallback', user)
         }
@@ -47,22 +41,23 @@ const QiscusProvider = ({ children }: { children: React.ReactNode }) => {
     }
 
     setQiscus(client)
-    return client
   }
 
   const login = async (userId: string, userKey: string, userName: string) => {
-    const q = qiscus ? qiscus : await initQiscus()
-
-    q.setUser(userId, userKey, userName)
+    qiscus.setUser(userId, userKey, userName)
   }
 
   const logout = () => {
-    qiscus?.disconnect()
+    qiscus.disconnect()
     setUser(null)
   }
 
+  useEffect(() => {
+    initQiscus()
+  }, [])
+
   return (
-    <QiscusContext.Provider value={{ qiscus, initQiscus, login, logout }}>
+    <QiscusContext.Provider value={{ isReady, qiscus, login, logout }}>
       {children}
     </QiscusContext.Provider>
   )

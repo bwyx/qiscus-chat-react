@@ -1,9 +1,7 @@
-import { useContext, useEffect } from 'react'
+import { useEffect, useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useStore } from '~/store'
 import { QiscusContext } from '~/providers/QiscusProvider'
-
-import type QiscusSDK from 'qiscus-sdk-core'
 
 interface UseQiscusProps {
   redirectTo?: string
@@ -15,14 +13,12 @@ const useQiscus = ({
   redirectIfAuthenticated = false
 }: UseQiscusProps = {}) => {
   const navigate = useNavigate()
-  const context = useContext(QiscusContext)
+  const qiscusContext = useContext(QiscusContext)
   const user = useStore((state) => state.user)
 
-  if (context === undefined) {
+  if (qiscusContext === undefined) {
     throw new Error('useQiscus must be used within a QiscusProvider')
   }
-
-  const { qiscus, initQiscus } = context
 
   // Auth guard
   useEffect(() => {
@@ -36,14 +32,7 @@ const useQiscus = ({
     }
   }, [user, redirectTo, redirectIfAuthenticated])
 
-  // Initialize Qiscus SDK on first render if saved user not null
-  useEffect(() => {
-    if (user && !qiscus) {
-      initQiscus(user)
-    }
-  }, [])
-
-  return { ...context, qiscus: qiscus as QiscusSDK }
+  return { user, ...qiscusContext }
 }
 
 export default useQiscus

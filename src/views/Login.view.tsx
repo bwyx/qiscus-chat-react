@@ -1,14 +1,14 @@
 import React, { useState } from 'react'
 import { useStore } from '~/store'
 
-import useAuth from '~/hooks/useQiscus'
+import useQiscus from '~/hooks/useQiscus'
 import { TextInput } from '~/components/fields'
 
 import { env } from '~/config'
 
 const Login = () => {
-  const { login } = useAuth({
-    redirectTo: '/chat',
+  const { login } = useQiscus({
+    redirectTo: '/lobby',
     redirectIfAuthenticated: true
   })
 

@@ -1,7 +1,6 @@
 import { css } from '~/styles'
 
 const style = css({
-  margin: '$2',
   py: '$2',
   px: '$4',
   maxWidth: '80%',
@@ -29,13 +28,13 @@ const style = css({
   }
 })
 
-export interface ChatBubbleProps {
+export interface TextBubbleProps {
   text: string
   received: boolean
 }
 
-const ChatBubble = ({ text, received }: ChatBubbleProps) => {
+const TextBubble = ({ text, received }: TextBubbleProps) => {
   return <div className={style({ received })}>{text}</div>
 }
 
-export default ChatBubble
+export default TextBubble

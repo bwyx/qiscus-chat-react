@@ -1,15 +1,15 @@
 import React from 'react'
 import { ComponentStory, ComponentMeta } from '@storybook/react'
 
-import ChatBubble, { ChatBubbleProps } from '~/components/chat/ChatBubble'
+import TextBubble, { TextBubbleProps } from '~/components/chat/TextBubble'
 
 export default {
-  title: 'Chat/ChatBubble',
-  component: ChatBubble
-} as ComponentMeta<typeof ChatBubble>
+  title: 'Chat/TextBubble',
+  component: TextBubble
+} as ComponentMeta<typeof TextBubble>
 
-const Template: ComponentStory<typeof ChatBubble> = (args: ChatBubbleProps) => (
-  <ChatBubble {...args} />
+const Template: ComponentStory<typeof TextBubble> = (args: TextBubbleProps) => (
+  <TextBubble {...args} />
 )
 
 const text = "It's not a bug — it's an undocumented feature."
