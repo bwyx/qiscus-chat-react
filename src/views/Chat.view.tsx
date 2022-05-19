@@ -1,4 +1,4 @@
-import useAuth from '~/hooks/useAuth'
+import useAuth from '~/hooks/useQiscus'
 
 const Chat = () => {
   const { logout } = useAuth({ redirectTo: '/' })
