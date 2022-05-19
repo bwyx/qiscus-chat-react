@@ -4,13 +4,10 @@ import { persist } from 'zustand/middleware'
 export const useStore = create(
   persist(
     () => ({
-      isAuthenticated: false
+      user: null
     }),
-    {
-      name: 'user'
-    }
+    { name: 'user' }
   )
 )
 
-export const setAuthenticated = (isAuthenticated: boolean) =>
-  useStore.setState({ isAuthenticated })
+export const setUser = (user: any) => useStore.setState({ user })

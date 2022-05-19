@@ -10,11 +10,15 @@ const Chat = lazy(() => import('~/views/Chat.view'))
 function App() {
   globalStyle()
 
-  const isAuthenticated = useStore((state) => state.isAuthenticated)
+  const user = useStore((state) => state.user)
 
   return (
     <div className="App">
-      <pre>{JSON.stringify({ isAuthenticated }, null, 2)}</pre>
+      <nav>
+        <Link to="/">Home</Link>
+        <Link to="/chat">Chat</Link>
+      </nav>
+      <pre>{JSON.stringify({ user }, null, 2)}</pre>
       <Routes>
         <Route
           path="/"

@@ -1,6 +1,9 @@
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useStore, setAuthenticated } from '~/store'
+import { useStore, setUser } from '~/store'
+
+import qiscus from '~/libs/qiscus'
+import { env } from '~/config'
 
 interface UseAuthProps {
   redirectTo?: string
@@ -12,22 +15,30 @@ const useAuth = ({
   redirectIfAuthenticated = false
 }: UseAuthProps = {}) => {
   const navigate = useNavigate()
-  const isAuthenticated = useStore((state) => state.isAuthenticated)
+  const user = useStore((state) => state.user)
 
-  const login = () => setAuthenticated(true)
-  const logout = () => setAuthenticated(false)
+  const login = () =>
+    qiscus.setUser(
+      env.VITE_QISCUS_USERID,
+      env.VITE_QISCUS_PASSKEY,
+      env.VITE_QISCUS_USERNAME
+    )
+  const logout = () => {
+    qiscus.disconnect()
+    setUser(null)
+  }
 
   // Auth guard
   useEffect(() => {
     if (!redirectTo) return
 
     if (
-      (redirectTo && !redirectIfAuthenticated && !isAuthenticated) ||
-      (redirectIfAuthenticated && isAuthenticated)
+      (redirectTo && !redirectIfAuthenticated && !user) ||
+      (redirectIfAuthenticated && user)
     ) {
       navigate(redirectTo, { replace: true })
     }
-  }, [isAuthenticated, redirectTo, redirectIfAuthenticated])
+  }, [user, redirectTo, redirectIfAuthenticated])
 
   return { login, logout }
 }
