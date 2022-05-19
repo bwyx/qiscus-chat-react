@@ -4,8 +4,8 @@ import { useStore } from '~/store'
 
 import globalStyle from '~/styles/global.style'
 
-const Login = lazy(() => import('~/views/Login'))
-const Chat = lazy(() => import('~/views/Chat'))
+const Login = lazy(() => import('~/views/Login.view'))
+const Chat = lazy(() => import('~/views/Chat.view'))
 
 function App() {
   globalStyle()
