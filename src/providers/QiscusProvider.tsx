@@ -30,6 +30,10 @@ const QiscusProvider = ({ children }: { children: React.ReactNode }) => {
           setIsReady(true)
           setUser(user)
           console.log('loginSuccessCallback', user)
+        },
+        loginErrorCallback: (error: any) => {
+          alert(error.response.body.error.message)
+          console.error(error)
         }
       }
     })
