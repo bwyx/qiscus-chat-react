@@ -134,10 +134,11 @@ const NewChat = () => {
       {isGroup ? (
         <OverlayButton
           onClick={() => {
-            qiscus.createGroupRoom(groupName, selectedUsersId, {
-              avatar:
-                'https://cdn.kayiprihtim.com/wp-content/uploads/2022/05/Yeni-Avatar-The-Last-Airbender-filmleri-yolda-662x352.jpg'
-            })
+            qiscus
+              .createGroupRoom(groupName, selectedUsersId)
+              .then((room: any) => {
+                navigate(`/chat?room=${room.id}`)
+              })
           }}
         >
           <ArrowRightIcon color="white" />
