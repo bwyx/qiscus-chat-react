@@ -1,5 +1,6 @@
 import React, { useState, useEffect, createContext } from 'react'
 import { useStore, setUser } from '~/store'
+import useRoomStore from '~/store/room'
 
 import QiscusSDK from 'qiscus-sdk-core'
 
@@ -19,6 +20,18 @@ const QiscusProvider = ({ children }: { children: React.ReactNode }) => {
   const [isReady, setIsReady] = useState(false)
   const [qiscus, setQiscus] = useState<QiscusSDK>(new QiscusSDK())
   const savedUser = useStore((state) => state.user)
+  const onMessagesReceived = useRoomStore((s) => s.onMessagesReceived)
+
+  const loginSuccessCallback = ({ user }: any) => {
+    setIsReady(true)
+    setUser(user)
+    console.log('loginSuccessCallback', user)
+  }
+
+  const loginErrorCallback = (error: any) => {
+    alert(error.response.body.error.message)
+    console.error(error)
+  }
 
   const initQiscus = async (user: any = savedUser) => {
     const client = new QiscusSDK()
@@ -26,15 +39,9 @@ const QiscusProvider = ({ children }: { children: React.ReactNode }) => {
     client.init({
       AppId: env.VITE_QISCUS_APPID,
       options: {
-        loginSuccessCallback: ({ user }: any) => {
-          setIsReady(true)
-          setUser(user)
-          console.log('loginSuccessCallback', user)
-        },
-        loginErrorCallback: (error: any) => {
-          alert(error.response.body.error.message)
-          console.error(error)
-        }
+        loginSuccessCallback,
+        loginErrorCallback,
+        newMessagesCallback: onMessagesReceived
       }
     })
 

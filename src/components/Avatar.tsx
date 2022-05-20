@@ -38,11 +38,12 @@ interface AvatarProps {
   url: string
   name: string
   size?: VariantProps<typeof styles.outer>['size']
+  onClick?: () => void
 }
 
-const Avatar = ({ url, name, size }: AvatarProps) => {
+const Avatar = ({ url, name, size, onClick }: AvatarProps) => {
   return (
-    <div className={styles.outer({ size })}>
+    <div className={styles.outer({ size })} onClick={onClick}>
       <img className={styles.img} src={url} alt={`${name}'s avatar`} />
     </div>
   )

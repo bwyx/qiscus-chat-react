@@ -1,13 +1,22 @@
 import { useNavigate } from 'react-router-dom'
 import Avatar from '~/components/Avatar'
-import { css } from '~/styles'
 
 import stack from '~/styles/stack.style'
 import text from '~/styles/text.style'
 
+import type { RoomState } from '~/store/room'
+import { css } from '~/styles'
+
 const styles = {
   outer: stack({
-    y: 'center'
+    y: 'center',
+    css: {
+      cursor: 'pointer',
+      '&:hover': {
+        xBackground: '$brand',
+        xBackgroundOpacity: 0.1
+      }
+    }
   }),
   detail: stack({
     dir: 'col',
@@ -32,29 +41,23 @@ const styles = {
         xColor: '$accent'
       }
     }
-  })
+  }),
+  unread: css({
+    height: 20,
+    width: 20,
+    textAlign: 'center',
+    xBackground: '$brand',
+    color: 'white',
+    fontSize: '$xs',
+    fontWeight: '$bold',
+    borderRadius: '$full'
+  })()
 }
 
-export interface RoomProps {
-  id: string
-  name: string
-  avatar: string
-  message: string
-  isLastMessageReceived: boolean
-}
-
-const Room = ({
-  id,
-  name,
-  avatar,
-  message,
-  isLastMessageReceived
-}: RoomProps) => {
+const Room = ({ id, name, avatar, lastMessage, unreadCount }: RoomState) => {
   const navigate = useNavigate()
-  const isFileMessage = message.includes('[file]')
-  const fileMessage = (
-    <em>File {isLastMessageReceived ? 'received' : 'sent'}.</em>
-  )
+  const isFileMessage = lastMessage.includes('[file]')
+  const fileMessage = <em>File attachment.</em>
 
   return (
     <li onClick={() => navigate(`/chat?room=${id}`)} className={styles.outer}>
@@ -62,9 +65,12 @@ const Room = ({
       <div className={styles.detail}>
         <h3 className={styles.roomName}>{name}</h3>
         <span className={styles.message}>
-          {isFileMessage ? fileMessage : message}
+          {isFileMessage ? fileMessage : lastMessage}
         </span>
       </div>
+      {unreadCount ? (
+        <span className={styles.unread}>{unreadCount}</span>
+      ) : null}
     </li>
   )
 }

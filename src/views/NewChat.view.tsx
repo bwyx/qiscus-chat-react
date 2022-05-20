@@ -2,15 +2,21 @@ import { useState, useEffect } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import useQiscus from '~/hooks/useQiscus'
 
+import { ArrowRightIcon } from '~/components/icons'
+import { TextInput } from '~/components/fields'
+import Avatar from '~/components/Avatar'
 import Contact from '~/components/Contact'
 import NavBar from '~/components/NavBar'
-import { css } from '~/styles'
 import OverlayButton from '~/components/OverlayButton'
-import { ArrowRightIcon } from '~/components/icons'
+
+import { css } from '~/styles'
 
 const styles = {
   selectedUsers: css({
-    my: '$4'
+    my: '$4',
+    mx: '$8',
+    display: 'flex',
+    flexWrap: 'wrap'
   })()
 }
 
@@ -27,12 +33,19 @@ const NewChat = () => {
   const [queries] = useSearchParams()
   const isGroup = queries.get('type') === 'group'
 
+  const [groupName, setGroupName] = useState('Qiscus Interview')
   const [users, setUsers] = useState<User[]>([])
-  const [selectedUsersId, setSelectedUsersId] = useState<number[]>([])
+  const [selectedUsersId, setSelectedUsersId] = useState<string[]>([])
+
+  const getUser = (email: string) => users.find((u) => u.email === email) as any
 
   const handleContactClick = (user: any) => {
     if (isGroup) {
-      alert('Group chat not supported yet')
+      if (!selectedUsersId.includes(user.email)) {
+        setSelectedUsersId((s) => [...s, user.email])
+      } else {
+        setSelectedUsersId((s) => s.filter((e) => e !== user.email))
+      }
     } else {
       qiscus.chatTarget(user.email).then((room: any) => {
         navigate(`/chat?room=${room.id}`)
@@ -46,8 +59,6 @@ const NewChat = () => {
 
     qiscus.getUsers('', 1, 10).then(({ users }: any) => {
       if (!shouldChangeState) return
-
-      console.log(users)
 
       setUsers(users)
     })
@@ -64,19 +75,49 @@ const NewChat = () => {
         left="back"
         onBack={() => navigate('/lobby')}
       />
+
+      {isGroup ? (
+        <>
+          <TextInput
+            type="text"
+            label="Group Name"
+            name="groupName"
+            value={groupName}
+            onChange={(e) => setGroupName(e.target.value)}
+          />
+          {!selectedUsersId.length ? 'select contacts' : null}
+        </>
+      ) : (
+        <button onClick={() => navigate('/chat/new?type=group')}>
+          New Group
+        </button>
+      )}
+
       {isGroup && selectedUsersId.length ? (
-        <ul className={styles.selectedUsers}>
-          {selectedUsersId.map((user: any) => {
-            return <div>{JSON.stringify(user)}</div>
+        <div className={styles.selectedUsers}>
+          {selectedUsersId.map((email: string, i: number) => {
+            const user = getUser(email)
+            return (
+              <Avatar
+                key={i}
+                size="large"
+                url={user.avatar_url}
+                name={user.name}
+                onClick={() =>
+                  setSelectedUsersId((s) =>
+                    s.filter((email) => email !== user.email)
+                  )
+                }
+              />
+            )
           })}
-        </ul>
+        </div>
       ) : null}
-      <button onClick={() => navigate('/chat/new?type=group')}>
-        New Group
-      </button>
+
       <ul>
         {users.map((user: any, i: number) => {
           const props = {
+            selected: selectedUsersId.includes(user.email),
             name: user.name,
             avatar: user.avatar_url
           }
@@ -91,7 +132,14 @@ const NewChat = () => {
         })}
       </ul>
       {isGroup ? (
-        <OverlayButton>
+        <OverlayButton
+          onClick={() => {
+            qiscus.createGroupRoom(groupName, selectedUsersId, {
+              avatar:
+                'https://cdn.kayiprihtim.com/wp-content/uploads/2022/05/Yeni-Avatar-The-Last-Airbender-filmleri-yolda-662x352.jpg'
+            })
+          }}
+        >
           <ArrowRightIcon color="white" />
         </OverlayButton>
       ) : null}

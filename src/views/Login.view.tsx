@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { useStore } from '~/store'
 
 import useQiscus from '~/hooks/useQiscus'
 import { TextInput } from '~/components/fields'
@@ -7,7 +6,7 @@ import { TextInput } from '~/components/fields'
 import { env } from '~/config'
 
 const Login = () => {
-  const { login } = useQiscus({
+  const { login, user } = useQiscus({
     redirectTo: '/lobby',
     redirectIfAuthenticated: true
   })
@@ -15,8 +14,6 @@ const Login = () => {
   const [userId, setUserId] = useState(env.VITE_QISCUS_USERID)
   const [userName, setUserName] = useState(env.VITE_QISCUS_USERNAME)
   const [userKey, setUserKey] = useState(env.VITE_QISCUS_PASSKEY)
-
-  const user = useStore((state) => state.user)
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()

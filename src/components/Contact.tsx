@@ -1,19 +1,31 @@
 import Avatar from '~/components/Avatar'
+import { css } from '~/styles'
 
 import stack from '~/styles/stack.style'
 import text from '~/styles/text.style'
 
 const styles = {
   outer: stack({
+    y: 'center',
     css: {
-      py: '$1',
-      borderBottom: '1px solid rgb($rgb$fg3 / 0.1)'
+      cursor: 'pointer',
+      mx: '$4',
+      py: '$2',
+      borderBottom: '1px solid rgb($rgb$fg3 / 0.1)',
+      '&:hover': {
+        xBackground: '$brand',
+        xBackgroundOpacity: 0.1
+      }
     }
   }),
-  name: text({
-    size: 'base',
-    css: {
-      xColor: '$fg1'
+  name: css({
+    fontSize: '$sm',
+    variants: {
+      selected: {
+        true: {
+          xColor: '$brand'
+        }
+      }
     }
   }),
   message: text({
@@ -27,16 +39,15 @@ const styles = {
 interface ContactProps {
   avatar: string
   name: string
+  selected?: boolean
   onClick?: () => void
 }
 
-const Contact = ({ avatar, name, onClick }: ContactProps) => {
+const Contact = ({ avatar, name, selected, onClick }: ContactProps) => {
   return (
     <li onClick={onClick} className={styles.outer}>
       <Avatar url={avatar} name={name} />
-      <div>
-        <h3 className={styles.name}>{name}</h3>
-      </div>
+      <h3 className={styles.name({ selected })}>{name}</h3>
     </li>
   )
 }
