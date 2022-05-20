@@ -5,6 +5,7 @@ import globalStyle from '~/styles/global.style'
 import { css } from '~/styles'
 
 const Login = lazy(() => import('~/views/Login.view'))
+const Profile = lazy(() => import('~/views/Profile.view'))
 const Lobby = lazy(() => import('~/views/Lobby.view'))
 const Chat = lazy(() => import('~/views/Chat.view'))
 const NewChat = lazy(() => import('~/views/NewChat.view'))
@@ -125,6 +126,14 @@ export default function () {
             element={
               <Suspense fallback={<>...</>}>
                 <Login />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/me"
+            element={
+              <Suspense fallback={<>...</>}>
+                <Profile />
               </Suspense>
             }
           />

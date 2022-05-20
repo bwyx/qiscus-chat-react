@@ -4,6 +4,7 @@ import { ChevronLeftIcon } from '~/components/icons'
 
 import { css } from '~/styles'
 import text from '~/styles/text.style'
+import { useNavigate } from 'react-router-dom'
 
 const styles = {
   outer: css({
@@ -38,6 +39,7 @@ interface NavBar {
 
 const NavBar = ({ title, left = 'avatar', onBack }: NavBar) => {
   const user = useStore((state) => state.user)
+  const navigate = useNavigate()
 
   const BackButton = () => {
     return (
@@ -52,7 +54,11 @@ const NavBar = ({ title, left = 'avatar', onBack }: NavBar) => {
       {left === 'back' ? (
         <BackButton />
       ) : (
-        <Avatar url={user?.avatar_url} name={user?.username} />
+        <Avatar
+          onClick={() => navigate('/me')}
+          url={user?.avatar_url}
+          name={user?.username}
+        />
       )}
       <h1 className={styles.title}>{title}</h1>
     </div>

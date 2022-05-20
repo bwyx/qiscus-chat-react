@@ -6,6 +6,7 @@ import useRoomStore from '~/store/room'
 import Room from '~/components/Room'
 import NavBar from '~/components/NavBar'
 import OverlayButton from '~/components/OverlayButton'
+import Button from '~/components/Button'
 import { MessageIcon } from '~/components/icons'
 
 import { css } from '~/styles'
@@ -74,7 +75,7 @@ const Lobby = () => {
       )}
 
       {!allRoomLoaded ? (
-        <button onClick={loadRooms}>Load More {page}</button>
+        <Button onClick={loadRooms}>Load More ({page})</Button>
       ) : null}
 
       <OverlayButton onClick={() => navigate('/chat/new')}>

@@ -4,9 +4,10 @@ import useQiscus from '~/hooks/useQiscus'
 import { TextInput } from '~/components/fields'
 
 import { env } from '~/config'
+import Button from '~/components/Button'
 
 const Login = () => {
-  const { login, user } = useQiscus({
+  const { login } = useQiscus({
     redirectTo: '/lobby',
     redirectIfAuthenticated: true
   })
@@ -49,17 +50,8 @@ const Login = () => {
           autoComplete="current-password"
           onChange={(e) => setUserKey(e.target.value)}
         />
-        <button type="submit">Login</button>
+        <Button>Login</Button>
       </form>
-      <pre
-        style={{
-          fontSize: 'var(--fontSizes-xs)',
-          overflow: 'scroll',
-          maxHeight: '300px'
-        }}
-      >
-        {JSON.stringify({ user }, null, 2)}
-      </pre>
     </>
   )
 }
