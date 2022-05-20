@@ -1,23 +1,23 @@
 import { useNavigate } from 'react-router-dom'
-
+import Avatar from '~/components/Avatar'
 import { css } from '~/styles'
+
 import stack from '~/styles/stack.style'
 import text from '~/styles/text.style'
 
 const styles = {
   outer: stack({
+    y: 'center'
+  }),
+  detail: stack({
+    dir: 'col',
+    density: 'packed',
+    grow: true,
     css: {
-      py: '$1',
+      py: '$2',
       borderBottom: '1px solid rgb($rgb$fg3 / 0.1)'
     }
   }),
-  avatar: css({
-    mr: '$2',
-    width: '3.5rem',
-    height: '3.5rem',
-    overflow: 'hidden',
-    borderRadius: '$full'
-  })(),
   roomName: text({
     size: 'base',
     css: {
@@ -25,31 +25,41 @@ const styles = {
     }
   }),
   message: text({
-    size: 'sm',
+    size: 'xs',
     css: {
-      xColor: '$fg3'
+      xColor: '$fg3',
+      em: {
+        xColor: '$accent'
+      }
     }
   })
 }
 
-interface RoomProps {
+export interface RoomProps {
   id: string
   name: string
   avatar: string
   message: string
-  received: boolean
-  date: any
+  isLastMessageReceived: boolean
 }
 
-const Room = ({ id, name, avatar, message, received, date }: RoomProps) => {
+const Room = ({
+  id,
+  name,
+  avatar,
+  message,
+  isLastMessageReceived
+}: RoomProps) => {
   const navigate = useNavigate()
   const isFileMessage = message.includes('[file]')
-  const fileMessage = <em>File {received ? 'received' : 'sent'}.</em>
+  const fileMessage = (
+    <em>File {isLastMessageReceived ? 'received' : 'sent'}.</em>
+  )
 
   return (
     <li onClick={() => navigate(`/chat?room=${id}`)} className={styles.outer}>
-      <img className={styles.avatar} src={avatar} alt="" />
-      <div>
+      <Avatar url={avatar} name={name} size="large" />
+      <div className={styles.detail}>
         <h3 className={styles.roomName}>{name}</h3>
         <span className={styles.message}>
           {isFileMessage ? fileMessage : message}

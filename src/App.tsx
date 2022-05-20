@@ -7,6 +7,7 @@ import { css } from '~/styles'
 const Login = lazy(() => import('~/views/Login.view'))
 const Lobby = lazy(() => import('~/views/Lobby.view'))
 const Chat = lazy(() => import('~/views/Chat.view'))
+const NewChat = lazy(() => import('~/views/NewChat.view'))
 
 const styles = {
   mobileFrame: css({
@@ -53,7 +54,9 @@ const styles = {
       position: 'relative',
       overflow: 'hidden',
       main: {
-        flexGrow: 1
+        flexGrow: 1,
+        maxHeight: '100%',
+        overflowX: 'auto'
       },
       '.border-fix': {
         position: 'absolute',
@@ -135,6 +138,14 @@ export default function () {
             element={
               <Suspense fallback={<>...</>}>
                 <Chat />
+              </Suspense>
+            }
+          />
+          <Route
+            path="chat/new"
+            element={
+              <Suspense fallback={<>...</>}>
+                <NewChat />
               </Suspense>
             }
           />

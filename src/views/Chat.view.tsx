@@ -1,22 +1,23 @@
 import { useEffect, useRef, useState } from 'react'
-import { useSearchParams } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import useQiscus from '~/hooks/useQiscus'
 
+import NavBar from '~/components/NavBar'
 import { TextBubble, ChatInputForm } from '~/components/chat'
 import { css } from '~/styles'
 
 const styles = {
   messagesContainer: css({
-    mx: '$2',
-    pb: '$20',
+    mx: '$4',
+    pb: '$24',
     display: 'flex',
     flexDirection: 'column',
     flexGrow: 1,
     li: {
-      mb: '$2'
+      mt: '$1'
     },
     '@sm': {
-      pb: '$24'
+      pb: '$32'
     }
   })()
 }
@@ -29,6 +30,7 @@ interface Message {
 const Chat = () => {
   const messagesContainer = useRef<HTMLUListElement>(null)
   const { isReady, qiscus, user } = useQiscus()
+  const navigate = useNavigate()
   const [queries] = useSearchParams()
   const roomId = queries.get('room')
 
@@ -82,7 +84,7 @@ const Chat = () => {
 
   return (
     <>
-      <h1>Chat</h1>
+      <NavBar title="Room Chat" left="back" onBack={() => navigate('/lobby')} />
       <ul ref={messagesContainer} className={styles.messagesContainer}>
         {messages.map((props: Message, i: number) => {
           return (
