@@ -1,4 +1,10 @@
-const MessageIcon = ({ color, size = 24 }: { color: string; size: number }) => (
+const MessageIcon = ({
+  color = 'rgb(var(--rgb-fg1))',
+  size = 24
+}: {
+  color?: string
+  size?: number
+}) => (
   <svg
     width={size}
     height={size}

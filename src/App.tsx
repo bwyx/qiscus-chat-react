@@ -11,6 +11,9 @@ const NewChat = lazy(() => import('~/views/NewChat.view'))
 
 const styles = {
   mobileFrame: css({
+    '::-webkit-scrollbar': {
+      display: 'none'
+    },
     '@sm': {
       margin: '50px auto',
       width: '375px',

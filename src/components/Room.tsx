@@ -19,7 +19,7 @@ const styles = {
     }
   }),
   roomName: text({
-    size: 'base',
+    size: 'sm',
     css: {
       xColor: '$fg1'
     }

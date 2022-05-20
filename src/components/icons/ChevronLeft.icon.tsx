@@ -1,6 +1,6 @@
 const ChevronLeftIcon = ({
-  color,
-  size
+  color = 'rgb(var(--rgb-fg1))',
+  size = 24
 }: {
   color?: string
   size?: number
@@ -15,7 +15,7 @@ const ChevronLeftIcon = ({
     <path
       d="M15.5 19C15.5 19 8.5 14.856 8.5 12C8.5 9.145 15.5 5 15.5 5"
       stroke={color}
-      strokeWidth="1.5"
+      strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
     />
