@@ -22,13 +22,14 @@ const styles = {
 }
 
 const Lobby = () => {
-  const { isReady, qiscus, user } = useQiscus({ redirectTo: '/' })
+  const { isReady, qiscus } = useQiscus({ redirectTo: '/' })
   const navigate = useNavigate()
 
   const rooms = useRoomStore((s) => s.rooms)
+  const setRooms = useRoomStore((s) => s.setRooms)
   const addRooms = useRoomStore((s) => s.addRooms)
   const page = useRoomStore((s) => s.page)
-  const nextPage = useRoomStore((s) => s.nextPage)
+  const setPage = useRoomStore((s) => s.setPage)
 
   const [allRoomLoaded, setAllRoomLoaded] = useState(false)
 
@@ -40,7 +41,7 @@ const Lobby = () => {
     unreadCount: r.count_notif
   })
 
-  const loadRooms = () => {
+  const loadRooms = (replace = false) => {
     if (allRoomLoaded) return
 
     qiscus.loadRoomList({ page, limit: 10 }).then((newRooms: any) => {
@@ -50,15 +51,23 @@ const Lobby = () => {
         return
       }
 
-      addRooms(rooms)
-      nextPage()
+      if (replace) {
+        setRooms(rooms)
+      } else {
+        addRooms(rooms)
+      }
+      setPage(page + 1)
     })
   }
 
   useEffect(() => {
-    if (!isReady || page !== 1) return
+    if (!isReady) return
 
-    loadRooms()
+    loadRooms(true)
+
+    return () => {
+      setPage(1)
+    }
   }, [isReady])
 
   return (
@@ -75,7 +84,7 @@ const Lobby = () => {
       )}
 
       {!allRoomLoaded ? (
-        <Button onClick={loadRooms}>Load More ({page})</Button>
+        <Button onClick={() => loadRooms()}>Load More ({page})</Button>
       ) : null}
 
       <OverlayButton onClick={() => navigate('/chat/new')}>

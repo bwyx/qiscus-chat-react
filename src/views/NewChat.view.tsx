@@ -5,6 +5,7 @@ import useQiscus from '~/hooks/useQiscus'
 import { ArrowRightIcon } from '~/components/icons'
 import { TextInput } from '~/components/fields'
 import Avatar from '~/components/Avatar'
+import Button from '~/components/Button'
 import Contact from '~/components/Contact'
 import NavBar from '~/components/NavBar'
 import OverlayButton from '~/components/OverlayButton'
@@ -88,9 +89,9 @@ const NewChat = () => {
           {!selectedUsersId.length ? 'select contacts' : null}
         </>
       ) : (
-        <button onClick={() => navigate('/chat/new?type=group')}>
+        <Button onClick={() => navigate('/chat/new?type=group')}>
           New Group
-        </button>
+        </Button>
       )}
 
       {isGroup && selectedUsersId.length ? (
@@ -135,7 +136,10 @@ const NewChat = () => {
         <OverlayButton
           onClick={() => {
             qiscus
-              .createGroupRoom(groupName, selectedUsersId)
+              .createGroupRoom(groupName, selectedUsersId, {
+                avatar:
+                  'https://cdn.kayiprihtim.com/wp-content/uploads/2022/05/Yeni-Avatar-The-Last-Airbender-filmleri-yolda-662x352.jpg'
+              })
               .then((room: any) => {
                 navigate(`/chat?room=${room.id}`)
               })

@@ -19,8 +19,10 @@ export const QiscusContext =
 const QiscusProvider = ({ children }: { children: React.ReactNode }) => {
   const [isReady, setIsReady] = useState(false)
   const [qiscus, setQiscus] = useState<QiscusSDK>(new QiscusSDK())
+
   const savedUser = useStore((state) => state.user)
   const onMessagesReceived = useRoomStore((s) => s.onMessagesReceived)
+  const clearAllRooms = useRoomStore((s) => s.clearAllRooms)
 
   const loginSuccessCallback = ({ user }: any) => {
     setIsReady(true)
@@ -61,6 +63,7 @@ const QiscusProvider = ({ children }: { children: React.ReactNode }) => {
   const logout = () => {
     qiscus.disconnect()
     setUser(null)
+    clearAllRooms()
   }
 
   useEffect(() => {

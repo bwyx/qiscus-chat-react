@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import useQiscus from '~/hooks/useQiscus'
+import useRoomStore from '~/store/room'
 
 import NavBar from '~/components/NavBar'
 import { TextBubble, ChatInputForm } from '~/components/chat'
@@ -34,6 +35,7 @@ const Chat = () => {
   const [queries] = useSearchParams()
   const roomId = queries.get('room')
 
+  const onMessagesReceived = useRoomStore((s) => s.onMessagesReceived)
   const [messages, setMessages] = useState<Message[]>([])
 
   const mapMessage = (m: any): Message => ({
@@ -78,7 +80,7 @@ const Chat = () => {
 
     return () => {
       shouldChangeState = false
-      qiscus.options.newMessageCallback = null
+      qiscus.options.newMessagesCallback = onMessagesReceived
     }
   }, [])
 

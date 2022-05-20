@@ -12,27 +12,31 @@ export interface RoomState {
 
 interface IRoom {
   rooms: RoomState[]
+  setRooms: (rooms: RoomState[]) => void
   addRooms: (rooms: RoomState[]) => void
 
   page: number
-  nextPage: () => void
+  setPage: (page: number) => void
 
   onMessagesReceived: (messages: any) => void
+
+  clearAllRooms: () => void
 }
 
 const useRoomStore = create<IRoom>((set, get) => ({
   rooms: [],
   page: 1,
 
-  addRooms: (newRooms: RoomState[]) => {
+  setRooms: (rooms) => set({ rooms }),
+  addRooms: (newRooms) => {
     const rooms = get().rooms
 
     set({ rooms: [...rooms, ...newRooms] })
   },
 
-  nextPage: () => set((state) => ({ page: state.page + 1 })),
+  setPage: (page) => set({ page }),
 
-  onMessagesReceived: (newMessages: any) => {
+  onMessagesReceived: (newMessages) => {
     newMessages.forEach((message: any) => {
       set(
         produce((s) => {
@@ -41,11 +45,21 @@ const useRoomStore = create<IRoom>((set, get) => ({
           if (room) {
             room.lastMessage = message.message
             room.unreadCount = room.unreadCount + 1
+          } else {
+            s.rooms.unshift({
+              id: message.room_id,
+              name: message.raw_room_name,
+              avatar: message.room_avatar,
+              lastMessage: message.message,
+              unreadCount: 1
+            })
           }
         })
       )
     })
-  }
+  },
+
+  clearAllRooms: () => set({ rooms: [], page: 1 })
 }))
 
 export default useRoomStore

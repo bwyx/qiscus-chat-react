@@ -19,6 +19,10 @@ const styles = {
         large: {
           width: 54,
           height: 54
+        },
+        xlarge: {
+          width: 175,
+          height: 175
         }
       }
     },
