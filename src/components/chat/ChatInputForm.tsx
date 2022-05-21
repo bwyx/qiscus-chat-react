@@ -94,20 +94,21 @@ const ChatInputForm = ({
     const file = e.target.files?.[0]
     if (!file) return
 
+    setMenuOpen(false)
+    setMessage('')
+
     onFileUpload(file, (error, progress, fileURL) => {
       if (error) return console.error(error)
 
       if (fileURL) {
-        const message = `[file] ${fileURL} [/file]`
-
         const payload = JSON.stringify({
           url: fileURL,
-          caption: file.name,
-          size: file.size,
-          fileType: file.type
+          caption: message || '',
+          file_name: file.name,
+          size: file.size
         })
 
-        onSendMessage(message, 'file_attachment', payload)
+        onSendMessage(`[file] ${fileURL} [/file]`, 'file_attachment', payload)
       }
     })
   }
@@ -124,6 +125,7 @@ const ChatInputForm = ({
       {menuOpen && (
         <div className={stack({ dir: 'col' })}>
           <button
+            type="button"
             onClick={() => imageInput.current?.click()}
             className={stack({
               y: 'center',
@@ -141,6 +143,7 @@ const ChatInputForm = ({
             <span className={text({ size: 'sm' })}>Upload a image</span>
           </button>
           <button
+            type="button"
             onClick={() => {
               setMenuOpen(false)
               setManuallyShowTemplateMessage(true)
@@ -181,6 +184,7 @@ const ChatInputForm = ({
       )}
       <div className={stack()}>
         <button
+          type="button"
           style={{ position: 'absolute', padding: 7 }}
           onClick={() => {
             setManuallyShowTemplateMessage(false)

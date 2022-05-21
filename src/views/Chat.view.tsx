@@ -4,7 +4,7 @@ import useQiscus from '~/hooks/useQiscus'
 import useRoomStore from '~/store/room'
 
 import NavBar from '~/components/NavBar'
-import { TextBubble, ChatInputForm } from '~/components/chat'
+import { TextBubble, ChatInputForm, AttachmentBubble } from '~/components/chat'
 import { css } from '~/styles'
 
 const styles = {
@@ -26,6 +26,8 @@ const styles = {
 interface Message {
   text: string
   received: boolean
+  type?: string
+  payload?: Record<string, any>
 }
 
 const Chat = () => {
@@ -43,7 +45,9 @@ const Chat = () => {
 
   const mapMessage = (m: any): Message => ({
     text: m.message,
-    received: m.email !== user.email
+    received: m.email !== user.email,
+    type: m.type,
+    payload: m.payload
   })
 
   useEffect(() => {
@@ -93,10 +97,19 @@ const Chat = () => {
       <NavBar title="Room Chat" left="back" onBack={() => navigate('/lobby')} />
       {messages.length ? (
         <ul ref={messagesContainer} className={styles.messagesContainer}>
-          {messages.map((props: Message, i: number) => {
+          {messages.map((message: Message, i: number) => {
+            const Component =
+              message.type === 'file_attachment' ? AttachmentBubble : TextBubble
+
+            const attachmentProps = {
+              url: message?.payload?.url,
+              caption: message?.payload?.caption,
+              fileName: message?.payload?.file_name
+            }
+
             return (
               <li key={i}>
-                <TextBubble {...props} />
+                <Component {...message} {...attachmentProps} />
               </li>
             )
           })}
