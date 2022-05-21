@@ -1,11 +1,14 @@
 import { useState } from 'react'
-import useQiscus from '~/hooks/useQiscus'
+import TextBubble from '~/components/chat/TextBubble'
+
 import { css } from '~/styles'
-import stack from '~/styles/stack.style'
 import { on } from '~/styles/themes'
+import stack from '~/styles/stack.style'
 
 const styles = {
   form: css({
+    display: 'flex',
+    flexDirection: 'column',
     position: 'fixed',
     bottom: '1rem',
     left: '1rem',
@@ -48,20 +51,51 @@ const styles = {
   })()
 }
 
-const ChatInputForm = ({ roomId }: { roomId: string | null }) => {
-  const { isReady, qiscus } = useQiscus()
+export interface ChatInputFormProps {
+  templateMessages?: string[]
+  showTemplateMessage?: boolean
+  onSendMessage: (message: string) => void
+}
+
+const defaultTemplateMessages = [
+  'Okay',
+  'Thank you!',
+  'Welcome to Qiscus Chat!',
+  'Hi, what can I help you with?',
+  'Kamu udah makan?'
+]
+
+const ChatInputForm = ({
+  templateMessages = defaultTemplateMessages,
+  showTemplateMessage,
+  onSendMessage
+}: ChatInputFormProps) => {
   const [message, setMessage] = useState('')
 
   const handleSubmit = (e: React.FormEvent<HTMLElement>) => {
     e.preventDefault()
-    if (!isReady || !message) return
+    if (!message) return
 
-    qiscus.sendComment(roomId, message)
+    onSendMessage(message)
     setMessage('')
   }
 
   return (
     <form onSubmit={handleSubmit} className={styles.form}>
+      {showTemplateMessage && (
+        <ul style={{ margin: '.25rem 0' }}>
+          {templateMessages.map((m, i) => (
+            <li key={i}>
+              <TextBubble
+                received={false}
+                isTemplateMessage={true}
+                text={m}
+                onClick={() => onSendMessage(m)}
+              />
+            </li>
+          ))}
+        </ul>
+      )}
       <div className={stack()}>
         <button style={{ position: 'absolute', padding: 7 }}>
           <AttachmentIcon />

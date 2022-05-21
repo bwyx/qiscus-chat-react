@@ -24,17 +24,42 @@ const style = css({
         xBackground: '$brand',
         borderBottomRightRadius: 0
       }
+    },
+    isTemplateMessage: {
+      true: {
+        margin: '.15rem',
+        cursor: 'pointer',
+        '&:hover': {
+          xBackgroundOpacity: 0.2
+        }
+      }
     }
-  }
+  },
+  compoundVariants: [
+    {
+      received: false,
+      isTemplateMessage: true,
+      css: {
+        xBackground: '$fg3',
+        xBackgroundOpacity: 0.25
+      }
+    }
+  ]
 })
 
 export interface TextBubbleProps {
   text: string
+  onClick?: () => void
   received: boolean
+  isTemplateMessage?: boolean
 }
 
-const TextBubble = ({ text, received }: TextBubbleProps) => {
-  return <div className={style({ received })}>{text}</div>
+const TextBubble = ({ text, onClick, ...styleProps }: TextBubbleProps) => {
+  return (
+    <div className={style(styleProps)} onClick={onClick}>
+      {text}
+    </div>
+  )
 }
 
 export default TextBubble

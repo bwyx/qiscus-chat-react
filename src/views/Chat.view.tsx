@@ -37,6 +37,9 @@ const Chat = () => {
 
   const onMessagesReceived = useRoomStore((s) => s.onMessagesReceived)
   const [messages, setMessages] = useState<Message[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+
+  const showTemplateMessage = !isLoading && messages.length === 0
 
   const mapMessage = (m: any): Message => ({
     text: m.message,
@@ -52,6 +55,7 @@ const Chat = () => {
 
       if (!shouldChangeState) return
       setMessages(messagesHistory)
+      setIsLoading(false)
     })
 
     return () => {
@@ -87,16 +91,21 @@ const Chat = () => {
   return (
     <>
       <NavBar title="Room Chat" left="back" onBack={() => navigate('/lobby')} />
-      <ul ref={messagesContainer} className={styles.messagesContainer}>
-        {messages.map((props: Message, i: number) => {
-          return (
-            <li key={i}>
-              <TextBubble {...props} />
-            </li>
-          )
-        })}
-      </ul>
-      <ChatInputForm roomId={roomId} />
+      {messages.length ? (
+        <ul ref={messagesContainer} className={styles.messagesContainer}>
+          {messages.map((props: Message, i: number) => {
+            return (
+              <li key={i}>
+                <TextBubble {...props} />
+              </li>
+            )
+          })}
+        </ul>
+      ) : null}
+      <ChatInputForm
+        showTemplateMessage={showTemplateMessage}
+        onSendMessage={(message) => qiscus.sendComment(roomId, message)}
+      />
     </>
   )
 }
