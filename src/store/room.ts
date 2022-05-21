@@ -37,8 +37,6 @@ const useRoomStore = create<IRoom>((set, get) => ({
 
   onMessagesReceived: (newMessages) => {
     newMessages.forEach((message: any) => {
-      console.log(message)
-
       set(
         produce((s) => {
           const room = s.rooms.find((r: any) => r.id === message.room_id)
