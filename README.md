@@ -15,7 +15,6 @@
 
 ## 3. Extra, requirement
 - [x] Quick Message, belum ada interaksi dari chat yang masuk, ada di <[ChatInputForm.tsx](https://github.com/bwyx/qiscus-chat-react/blob/main/src/components/chat/ChatInputForm.tsx)/>
-- [x] Dark Mode, belum ada manual switch di chat app, di storybook ada.
 
 ### Limitation
 Source code sedikit berantakan, tampilan, interaksi kurang memuaskan dan..

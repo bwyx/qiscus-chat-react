@@ -39,13 +39,21 @@ const styles = {
     width: '100%',
     borderRadius: '$2xl',
     '&::placeholder': { color: 'rgb(255 255 255 / 0.25)' },
-    '@sm': { fontSize: '$base' },
     [on('light')]: {
       xBackground: '$gray-600',
       xBackgroundOpacity: 0.5
     },
     [on('dark')]: {
       xBackground: '$gray-600',
+      xBackgroundOpacity: 0.5
+    }
+  })(),
+  menu: css({
+    textAlign: 'left',
+    padding: '$2',
+    borderRadius: '$lg',
+    '&:hover': {
+      xBackground: '$gray-800',
       xBackgroundOpacity: 0.5
     }
   })()
@@ -125,40 +133,18 @@ const ChatInputForm = ({
         <div className={stack({ dir: 'col' })}>
           <button
             type="button"
+            className={styles.menu}
             onClick={() => imageInput.current?.click()}
-            className={stack({
-              y: 'center',
-              css: {
-                gap: 10,
-                padding: '$2',
-                borderRadius: '$lg',
-                '&:hover': {
-                  xBackground: '$gray-800',
-                  xBackgroundOpacity: 0.5
-                }
-              }
-            })}
           >
             <span className={text({ size: 'sm' })}>Upload a image</span>
           </button>
           <button
             type="button"
+            className={styles.menu}
             onClick={() => {
               setMenuOpen(false)
               setManuallyShowTemplateMessage(true)
             }}
-            className={stack({
-              y: 'center',
-              css: {
-                gap: 10,
-                padding: '$2',
-                borderRadius: '$lg',
-                '&:hover': {
-                  xBackground: '$gray-800',
-                  xBackgroundOpacity: 0.5
-                }
-              }
-            })}
           >
             <span className={text({ size: 'sm' })}>Template message</span>
           </button>
@@ -184,7 +170,7 @@ const ChatInputForm = ({
       <div className={stack()}>
         <button
           type="button"
-          style={{ position: 'absolute', padding: 7 }}
+          style={{ position: 'absolute', padding: 6 }}
           onClick={() => {
             setManuallyShowTemplateMessage(false)
             setMenuOpen(!menuOpen)

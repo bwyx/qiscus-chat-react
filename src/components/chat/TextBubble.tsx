@@ -11,7 +11,6 @@ const style = css({
   whiteSpace: 'pre-line',
   color: 'white',
   borderRadius: '$2xl',
-  '@sm': { fontSize: '$base' },
   variants: {
     received: {
       true: {
