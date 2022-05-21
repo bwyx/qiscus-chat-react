@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import useQiscus from '~/hooks/useQiscus'
-import useRoomStore from '~/store/room'
+import useRoomStore, { RoomState } from '~/store/room'
 
 import NavBar from '~/components/NavBar'
 import { TextBubble, ChatInputForm, AttachmentBubble } from '~/components/chat'
@@ -30,6 +30,8 @@ interface Message {
   payload?: Record<string, any>
 }
 
+type LocalRoomState = Omit<RoomState, 'unreadCount' | 'lastMessage'>
+
 const Chat = () => {
   const messagesContainer = useRef<HTMLUListElement>(null)
   const { isReady, qiscus, user } = useQiscus()
@@ -38,6 +40,7 @@ const Chat = () => {
   const roomId = queries.get('room')
 
   const onMessagesReceived = useRoomStore((s) => s.onMessagesReceived)
+  const [room, setRoom] = useState<LocalRoomState | null>(null)
   const [messages, setMessages] = useState<Message[]>([])
   const [isLoading, setIsLoading] = useState(true)
 
@@ -54,10 +57,17 @@ const Chat = () => {
     if (!isReady) return
     let shouldChangeState = true
 
-    qiscus.getRoomById(roomId).then(({ comments }: any) => {
+    qiscus.getRoomById(roomId).then(({ comments, ...data }: any) => {
+      if (!shouldChangeState) return
+
+      const roomData = {
+        id: data.id,
+        name: data.name,
+        avatar: data.avatar
+      }
       const messagesHistory: Message[] = comments.map(mapMessage)
 
-      if (!shouldChangeState) return
+      setRoom(roomData)
       setMessages(messagesHistory)
       setIsLoading(false)
     })
@@ -77,7 +87,7 @@ const Chat = () => {
   useEffect(() => {
     let shouldChangeState = true
     qiscus.options.newMessagesCallback = (m: any) => {
-      const thisRoomMessage = m.filter((m: any) => m.room_id_str === roomId)
+      const thisRoomMessage = m.filter((m: any) => m.room_id === roomId)
 
       if (thisRoomMessage.length === 0) return
       const newMessages: Message[] = m.map(mapMessage)
@@ -94,7 +104,11 @@ const Chat = () => {
 
   return (
     <>
-      <NavBar title="Room Chat" left="back" onBack={() => navigate('/lobby')} />
+      <NavBar
+        title={room?.name || 'Room Chat'}
+        left="back"
+        onBack={() => navigate('/lobby')}
+      />
       {messages.length ? (
         <ul ref={messagesContainer} className={styles.messagesContainer}>
           {messages.map((message: Message, i: number) => {

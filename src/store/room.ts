@@ -2,10 +2,9 @@ import create from 'zustand'
 import produce from 'immer'
 
 export interface RoomState {
-  id: string
+  id: number
   name: string
   avatar: string
-  messages?: string
   lastMessage: string
   unreadCount: number
 }
