@@ -104,7 +104,10 @@ const Chat = () => {
       ) : null}
       <ChatInputForm
         showTemplateMessage={showTemplateMessage}
-        onSendMessage={(message) => qiscus.sendComment(roomId, message)}
+        onSendMessage={(message, type, payload) =>
+          qiscus.sendComment(roomId, message, null, type, payload)
+        }
+        onFileUpload={(file, cb) => qiscus.upload(file, cb)}
       />
     </>
   )

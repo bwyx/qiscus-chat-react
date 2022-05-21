@@ -1,9 +1,10 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import TextBubble from '~/components/chat/TextBubble'
 
 import { css } from '~/styles'
 import { on } from '~/styles/themes'
 import stack from '~/styles/stack.style'
+import text from '~/styles/text.style'
 
 const styles = {
   form: css({
@@ -54,7 +55,11 @@ const styles = {
 export interface ChatInputFormProps {
   templateMessages?: string[]
   showTemplateMessage?: boolean
-  onSendMessage: (message: string) => void
+  onSendMessage: (message: string, type?: string, payload?: string) => void
+  onFileUpload: (
+    file: File,
+    cb: (error: any, progress: any, fileURL: string) => void
+  ) => void
 }
 
 const defaultTemplateMessages = [
@@ -68,9 +73,14 @@ const defaultTemplateMessages = [
 const ChatInputForm = ({
   templateMessages = defaultTemplateMessages,
   showTemplateMessage,
-  onSendMessage
+  onSendMessage,
+  onFileUpload
 }: ChatInputFormProps) => {
+  const imageInput = useRef<HTMLInputElement>(null)
   const [message, setMessage] = useState('')
+  const [menuOpen, setMenuOpen] = useState(false)
+  const [manuallyShowTemplateMessage, setManuallyShowTemplateMessage] =
+    useState(false)
 
   const handleSubmit = (e: React.FormEvent<HTMLElement>) => {
     e.preventDefault()
@@ -80,9 +90,79 @@ const ChatInputForm = ({
     setMessage('')
   }
 
+  const handleUploadImage = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    onFileUpload(file, (error, progress, fileURL) => {
+      if (error) return console.error(error)
+
+      if (fileURL) {
+        const message = `[file] ${fileURL} [/file]`
+
+        const payload = JSON.stringify({
+          url: fileURL,
+          caption: file.name,
+          size: file.size,
+          fileType: file.type
+        })
+
+        onSendMessage(message, 'file_attachment', payload)
+      }
+    })
+  }
+
   return (
     <form onSubmit={handleSubmit} className={styles.form}>
-      {showTemplateMessage && (
+      <input
+        type="file"
+        accept="image/*"
+        onChange={handleUploadImage}
+        ref={imageInput}
+        style={{ opacity: 0, position: 'absolute', width: 0, height: 0 }}
+      />
+      {menuOpen && (
+        <div className={stack({ dir: 'col' })}>
+          <button
+            onClick={() => imageInput.current?.click()}
+            className={stack({
+              y: 'center',
+              css: {
+                gap: 10,
+                padding: '$2',
+                borderRadius: '$lg',
+                '&:hover': {
+                  xBackground: '$gray-800',
+                  xBackgroundOpacity: 0.5
+                }
+              }
+            })}
+          >
+            <span className={text({ size: 'sm' })}>Upload a image</span>
+          </button>
+          <button
+            onClick={() => {
+              setMenuOpen(false)
+              setManuallyShowTemplateMessage(true)
+            }}
+            className={stack({
+              y: 'center',
+              css: {
+                gap: 10,
+                padding: '$2',
+                borderRadius: '$lg',
+                '&:hover': {
+                  xBackground: '$gray-800',
+                  xBackgroundOpacity: 0.5
+                }
+              }
+            })}
+          >
+            <span className={text({ size: 'sm' })}>Template message</span>
+          </button>
+        </div>
+      )}
+      {(showTemplateMessage || manuallyShowTemplateMessage) && (
         <ul style={{ margin: '.25rem 0' }}>
           {templateMessages.map((m, i) => (
             <li key={i}>
@@ -90,15 +170,26 @@ const ChatInputForm = ({
                 received={false}
                 isTemplateMessage={true}
                 text={m}
-                onClick={() => onSendMessage(m)}
+                onClick={() => {
+                  onSendMessage(m)
+                  setManuallyShowTemplateMessage(false)
+                }}
               />
             </li>
           ))}
         </ul>
       )}
       <div className={stack()}>
-        <button style={{ position: 'absolute', padding: 7 }}>
-          <AttachmentIcon />
+        <button
+          style={{ position: 'absolute', padding: 7 }}
+          onClick={() => {
+            setManuallyShowTemplateMessage(false)
+            setMenuOpen(!menuOpen)
+          }}
+        >
+          <AttachmentIcon
+            style={{ transform: `rotate(${menuOpen ? '45deg' : '0deg'})` }}
+          />
         </button>
         <input
           className={styles.input}
@@ -139,9 +230,9 @@ function SendIcon() {
   )
 }
 
-function AttachmentIcon() {
+function AttachmentIcon(props: React.HTMLAttributes<SVGElement>) {
   return (
-    <svg width="24" height="24" viewBox="0 0 24 24">
+    <svg width="24" height="24" viewBox="0 0 24 24" {...props}>
       <path
         fill="currentColor"
         d="M12 2.00098C6.486 2.00098 2 6.48698 2 12.001C2 17.515 6.486 22.001 12 22.001C17.514 22.001 22 17.515 22 12.001C22 6.48698 17.514 2.00098 12 2.00098ZM17 13.001H13V17.001H11V13.001H7V11.001H11V7.00098H13V11.001H17V13.001Z"
