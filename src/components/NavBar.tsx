@@ -14,6 +14,7 @@ const styles = {
     top: 0,
     display: 'grid',
     gridTemplateColumns: '3rem 1fr 3rem',
+    alignItems: 'center',
     zIndex: '$50',
     xBackground: '$bg',
     borderBottom: '1px solid rgb($rgb$bg / 25%)',
@@ -25,7 +26,9 @@ const styles = {
   title: text({
     size: 'lg',
     weight: 'bold',
+    ellipsis: true,
     css: {
+      maxWidth: '80%',
       mx: 'auto'
     }
   })
@@ -34,10 +37,11 @@ const styles = {
 interface NavBar {
   title: string
   left?: 'avatar' | 'back'
+  right?: React.ReactNode
   onBack?: () => void
 }
 
-const NavBar = ({ title, left = 'avatar', onBack }: NavBar) => {
+const NavBar = ({ title, left = 'avatar', right, onBack }: NavBar) => {
   const user = useStore((state) => state.user)
   const navigate = useNavigate()
 
@@ -61,6 +65,7 @@ const NavBar = ({ title, left = 'avatar', onBack }: NavBar) => {
         />
       )}
       <h1 className={styles.title}>{title}</h1>
+      {right}
     </div>
   )
 }

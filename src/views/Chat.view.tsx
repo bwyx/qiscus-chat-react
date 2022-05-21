@@ -4,6 +4,7 @@ import useQiscus from '~/hooks/useQiscus'
 import useRoomStore, { RoomState } from '~/store/room'
 
 import NavBar from '~/components/NavBar'
+import Avatar from '~/components/Avatar'
 import { TextBubble, ChatInputForm, AttachmentBubble } from '~/components/chat'
 import { css } from '~/styles'
 
@@ -87,7 +88,7 @@ const Chat = () => {
   useEffect(() => {
     let shouldChangeState = true
     qiscus.options.newMessagesCallback = (m: any) => {
-      const thisRoomMessage = m.filter((m: any) => m.room_id === roomId)
+      const thisRoomMessage = m.filter((m: any) => m.room_id_str === roomId)
 
       if (thisRoomMessage.length === 0) return
       const newMessages: Message[] = m.map(mapMessage)
@@ -107,6 +108,13 @@ const Chat = () => {
       <NavBar
         title={room?.name || 'Room Chat'}
         left="back"
+        right={
+          <Avatar
+            size="medium"
+            url={room?.avatar || ''}
+            name={room?.name || ''}
+          />
+        }
         onBack={() => navigate('/lobby')}
       />
       {messages.length ? (
