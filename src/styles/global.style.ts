@@ -11,14 +11,14 @@ export default globalCss({
       fontWeight: '100 900',
       fontDisplay: 'swap',
       fontStyle: 'normal',
-      src: "url(fonts/Inter-roman-latin.var.woff2) format('woff2')"
+      src: "url(/fonts/Inter-roman-latin.var.woff2) format('woff2')"
     },
     {
       fontFamily: 'Inter var',
       fontWeight: '100 900',
       fontDisplay: 'swap',
       fontStyle: 'italic',
-      src: "url(fonts/Inter-italic-latin.var.woff2) format('woff2')"
+      src: "url(/fonts/Inter-italic-latin.var.woff2) format('woff2')"
     }
   ],
 
