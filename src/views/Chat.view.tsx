@@ -109,11 +109,7 @@ const Chat = () => {
         title={room?.name || 'Room Chat'}
         left="back"
         right={
-          <Avatar
-            size="medium"
-            url={room?.avatar || ''}
-            name={room?.name || ''}
-          />
+          room && <Avatar size="medium" url={room.avatar} name={room.name} />
         }
         onBack={() => navigate('/lobby')}
       />
