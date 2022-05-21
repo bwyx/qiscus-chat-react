@@ -1,10 +1,9 @@
 import { useRef, useState } from 'react'
-import TextBubble from '~/components/chat/TextBubble'
+import { TextBubble } from '~/components/chat'
 
 import { css } from '~/styles'
 import { on } from '~/styles/themes'
-import stack from '~/styles/stack.style'
-import text from '~/styles/text.style'
+import { stack, text } from '~/styles/primitives'
 
 const styles = {
   form: css({

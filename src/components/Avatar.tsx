@@ -1,5 +1,6 @@
-import type { VariantProps } from '@stitches/core'
 import { css } from '~/styles'
+
+import type { VariantProps } from '@stitches/core'
 
 const styles = {
   outer: css({

@@ -1,10 +1,9 @@
 import { useNavigate } from 'react-router-dom'
-import Avatar from '~/components/Avatar'
-import Button from '~/components/Button'
-import NavBar from '~/components/NavBar'
+
 import useQiscus from '~/hooks/useQiscus'
-import stack from '~/styles/stack.style'
-import text from '~/styles/text.style'
+import { Avatar, Button, NavBar } from '~/components'
+
+import { stack, text } from '~/styles/primitives'
 
 const Profile = () => {
   const { user, logout } = useQiscus({ redirectTo: '/' })

@@ -1,10 +1,11 @@
-import Avatar from '~/components/Avatar'
+import { useNavigate } from 'react-router-dom'
+
 import { useStore } from '~/store'
+import { Avatar } from '~/components'
 import { ChevronLeftIcon } from '~/components/icons'
 
 import { css } from '~/styles'
-import text from '~/styles/text.style'
-import { useNavigate } from 'react-router-dom'
+import { text } from '~/styles/primitives'
 
 const styles = {
   outer: css({

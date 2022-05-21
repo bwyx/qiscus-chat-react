@@ -1,11 +1,11 @@
 import { useNavigate } from 'react-router-dom'
-import Avatar from '~/components/Avatar'
 
-import stack from '~/styles/stack.style'
-import text from '~/styles/text.style'
+import { Avatar } from '~/components'
+
+import { css } from '~/styles'
+import { stack, text } from '~/styles/primitives'
 
 import type { RoomState } from '~/store/room'
-import { css } from '~/styles'
 
 const styles = {
   outer: stack({

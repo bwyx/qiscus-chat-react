@@ -2,13 +2,9 @@ import { useState, useEffect } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import useQiscus from '~/hooks/useQiscus'
 
-import { ArrowRightIcon } from '~/components/icons'
+import { Avatar, Button, Contact, NavBar, OverlayButton } from '~/components'
 import { TextInput } from '~/components/fields'
-import Avatar from '~/components/Avatar'
-import Button from '~/components/Button'
-import Contact from '~/components/Contact'
-import NavBar from '~/components/NavBar'
-import OverlayButton from '~/components/OverlayButton'
+import { ArrowRightIcon } from '~/components/icons'
 
 import { css } from '~/styles'
 

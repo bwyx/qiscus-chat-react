@@ -1,8 +1,10 @@
 import { Suspense, lazy } from 'react'
-import { Routes, Route, Link } from 'react-router-dom'
+import { Routes, Route } from 'react-router-dom'
+
 import QiscusProvider from '~/providers/QiscusProvider'
-import globalStyle from '~/styles/global.style'
+
 import { css } from '~/styles'
+import globalStyle from '~/styles/global.style'
 
 const Login = lazy(() => import('~/views/Login.view'))
 const Profile = lazy(() => import('~/views/Profile.view'))

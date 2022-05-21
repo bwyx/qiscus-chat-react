@@ -3,8 +3,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 import useQiscus from '~/hooks/useQiscus'
 import useRoomStore, { RoomState } from '~/store/room'
 
-import NavBar from '~/components/NavBar'
-import Avatar from '~/components/Avatar'
+import { Avatar, NavBar } from '~/components'
 import { TextBubble, ChatInputForm, AttachmentBubble } from '~/components/chat'
 import { css } from '~/styles'
 

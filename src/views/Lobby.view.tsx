@@ -3,10 +3,13 @@ import { useNavigate } from 'react-router-dom'
 import useQiscus from '~/hooks/useQiscus'
 import useRoomStore from '~/store/room'
 
-import Room from '~/components/Room'
-import NavBar from '~/components/NavBar'
-import OverlayButton from '~/components/OverlayButton'
-import Button from '~/components/Button'
+import {
+  Button,
+  NavBar,
+  OverlayButton,
+  Room,
+  ThemeSwitcher
+} from '~/components'
 import { MessageIcon } from '~/components/icons'
 
 import { css } from '~/styles'
@@ -72,7 +75,7 @@ const Lobby = () => {
 
   return (
     <>
-      <NavBar title="Conversations" />
+      <NavBar title="Conversations" right={<ThemeSwitcher />} />
       {rooms.length > 0 ? (
         <ul className={styles.roomContainer}>
           {rooms.map((props, i) => {

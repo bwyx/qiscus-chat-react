@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
 
 import useQiscus from '~/hooks/useQiscus'
+import { Button } from '~/components'
 import { TextInput } from '~/components/fields'
 
 import { env } from '~/config'
-import Button from '~/components/Button'
 
 const Login = () => {
   const { login } = useQiscus({

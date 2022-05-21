@@ -1,8 +1,7 @@
-import Avatar from '~/components/Avatar'
-import { css } from '~/styles'
+import { Avatar } from '~/components'
 
-import stack from '~/styles/stack.style'
-import text from '~/styles/text.style'
+import { css } from '~/styles'
+import { stack, text } from '~/styles/primitives'
 
 const styles = {
   outer: stack({
